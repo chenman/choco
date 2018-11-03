@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://www.xmethink.com/demo/demo/xiangtilist.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>箱体查询</title>
+	<meta content="yes" name="apple-mobile-web-app-capable"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script src="js/jquery.js"></script>
+	<script src="js/iscroll.js"></script>
+	<script src="js/pullToRefresh.js"></script>
+	<link rel="stylesheet" href="js/pullToRefresh.css">
+	<style>
+		/*清浮*/
+		.clearfix:after {content:"\200B"; display:block; height:0; clear:both; }
+		.clearfix { *zoom:1; }
+		em{
+			font-style: normal;
+			font-weight: normal;
+		}
+		body, html {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			font-family: Arial, Helvetica, sans-serif;
+			
+		}
+		.search1{
+			padding-top: 20px;
+			padding-bottom: 20px;
+			width: 100%;
+		}
+		.search1 div{
+			width: 100%;
+		}
+		.search1 em{
+			margin-left: 3%;
+		}
+		
+		.search1 span{
+			display: block;
+			margin-left: 5%;
+			width: 80%;
+			height: 40px;
+			line-height: 40px;
+			margin: 0 auto;
+			text-align: center;
+			margin-top: 15px;
+			border:1px solid #999;
+			border-radius: 5px;
+			background-color: #4198ff;
+			color: #fff;
+			font-size: 16px;
+		}
+		.search1 input{
+			display: block;
+			margin-left: 5%;
+			width: 79%;
+			height: 35px;
+			margin: 0 auto;
+			margin-top: 5px;
+		}
+		#wrapper{
+			overflow-y:scroll!important;
+		}
+		#wrapper {  
+		    overflow: hidden;  
+		    overflow-y: auto;  
+		}  
+		#wrapper::-webkit-scrollbar-track-piece {  
+		    background-color: rgba(0, 0, 0, 0);  
+		    border-left: 1px solid rgba(0, 0, 0, 0);  
+		}  
+		#wrapper::-webkit-scrollbar {  
+		    width: 5px;  
+		    height: 13px;  
+		    -webkit-border-radius: 5px;  
+		    -moz-border-radius: 5px;  
+		    border-radius: 5px;  
+		}  
+		#wrapper::-webkit-scrollbar-thumb {  
+		    background-color: rgba(0, 0, 0, 0.5);  
+		    background-clip: padding-box;  
+		    -webkit-border-radius: 5px;  
+		    -moz-border-radius: 5px;  
+		    border-radius: 5px;  
+		    min-height: 28px;  
+		}  
+		#wrapper::-webkit-scrollbar-thumb:hover {  
+		    background-color: rgba(0, 0, 0, 0.5);  
+		    -webkit-border-radius: 5px;  
+		    -moz-border-radius: 5px;  
+		    border-radius: 5px;  
+		} 
+		#scroller li {
+			font-size: 13px;
+			line-height: 20px;
+		} 
+		.head{
+			border-bottom: 1px solid #ddd;
+			height: 40px;
+			width: 100%;
+		}
+		.head span{
+			float: left;
+			display: block;
+			width: 84%;
+			text-align: center;
+			height: 40px;
+			line-height: 40px;
+		} 
+		.head img{
+			float: left;
+			height: 20px;
+			width: 5%;
+			margin-left: 3%;
+			margin-top: 10px;
+		}
+		*{
+	    	padding: 0;
+	    	margin: 0
+	    }
+		.foot{
+			position: fixed;
+			bottom: 0px;
+			width: 100%;
+			z-index: 10;
+			background: #fff;
+		}
+		.foot ul{
+			border-top: 1px solid #ddd;
+		}
+		.foot ul a{
+			color: #000;
+			text-decoration: none;
+			font-size: 16px;
+		}
+		.foot li{
+			float: left;
+			/*width: 25%;*/
+			width: 33%;
+			text-align: center;
+			list-style-type: none;
+		}
+		.b{
+			width: 100%;
+			line-height: 30px;
+			margin-top: -111px;
+			border:1px solid #ccc;
+		}
+		.b a{
+			display: block;
+			width: 100%;
+			text-align: center;
+		}
+		.li_a{
+			height: 50px;
+			line-height: 50px;
+		}
+		.wait{
+			position: fixed;
+			left: 44%;
+			z-index: 100;
+			display: none;
+		}
+		.aa{
+			padding: 0 20px;
+			height: 40px;
+			font-size: 14px;
+			border-bottom: 1px solid #ccc;
+			font-weight: bold;
+		}
+
+
+				/*分頁樣式*/
+	*{ margin:0; padding:0; list-style:none;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:none;}
+.tcdPageCode{position: fixed;left: 0;bottom: 51px;width: 100%;color: #ccc;text-align:center;z-index: 100;background: #fff;height: 50px;display: none;line-height: 50px;}
+.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px; line-height: 25px;  padding: 0 2px;border: 1px solid #ddd; margin: 0 2px;border-radius: 4px;vertical-align: middle;font-size: 12px;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 4px;margin: 0 2px;color: #fff;background-color: #428bca; border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;font-size: 12px}
+.tcdPageCode span.disabled{ display: inline-block;height: 25px;line-height: 25px;padding: 0 5px;margin: 0 2px; color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;font-size: 13px}
+
+	</style>
+</head>
+<body>
+	<div class="head"><img src="image/fanhui.png" alt=""><span>箱体查询</span></div>
+	<div class="search1">
+		<input type="text" id="xiaoqu" placeholder="请输入小区">
+		<input type="text" class="menpai" placeholder="请输入箱体名称">
+		<span id="chaxun">查询</span>
+	</div>
+	<img class="wait" src="image/loading.gif" alt="">
+	<div id="wrapper">
+	  <ul></ul>
+	</div>
+	<div class="tcdPageCode"></div>	
+	<div class="foot" id="footer">
+		<ul class="clearfix">
+			<li><a class="li_a index1">首页</a></li>
+			<li><a class="li_a menpailist">地址查询</a></li>
+			<li><a class="li_a" href="xiangtilist.html">箱体查询</a></li>
+		</ul>		
+	</div>
+	<input type="text" class="dangqianye" style="display: none;">
+
+<script src="./js/jquery.page.js"></script>
+<script>
+	$(document).ready(function(){   
+		sessionStorage.getItem('testKey'); // => 返回testKey对应的值
+		console.log(sessionStorage.getItem('testKey'))
+		if(sessionStorage.getItem('testKey')==null){
+		  	alert("您未登录无法访问该页面，请登录");
+		  	window.location.href = "login.html"; 
+		}else{
+		  	$(".index1").click(function(){
+		  		window.location.href = "index.html"; 
+		  	})
+		  	$(".menpailist").click(function(){
+		  		window.location.href = "menpailist.html"; 
+		  	})
+		  	$(".chedan").click(function(){
+		  		window.location.href = "chedan.html"; 
+			})
+		}  
+	})
+
+	var oHeight = $(document).height(); //浏览器当前的高度
+	$(window).resize(function(){
+    	if($(document).height() < oHeight){
+    		$("#footer").css("display","none");
+		}else{
+   			$("#footer").css("display","block");
+		}
+	});
+
+	function xr(q){
+		$("#wrapper ul li").remove();
+		$(".wait").show();
+		var village=$("#xiaoqu").val();//市县
+		var boxName=$(".menpai").val();//门牌关键字
+		var pageNo=q;
+		var pageSize="15";
+	  	// console.log(address);
+	  	// console.log(pageNo);
+		var count=$(".dangqianye").attr('zs');
+		var pages=parseInt(count)/parseInt(pageSize);
+		if(parseInt(count)%10>0){
+			pages=parseInt(pages)+1;
+		}
+		
+		$(".tcdPageCode").createPage({
+            pageCount:pages,//总共数据条数
+            current:pageNo,//当前页码
+            backFn:function(p){
+                console.log("p="+p);
+            }
+        });     
+		$(".dangqianye").val(pageNo);
+		$.ajax({
+			url:'http://localhost:8080/api/getBoxList',
+          	type:'post',
+          	xhrField: {
+          		withCredentials: true
+          	},
+          	data:{//格式（后台：前端）
+	            village:village,
+		        boxName:boxName,
+		        pageNo:pageNo,
+		        pageSize:pageSize
+          	},
+          	crossDomain: true,
+          	dataType:'jsonp',//请求方式
+	  		jsonp:"callback",//Jquery生成验证参数的名称
+          	success: function(datamsg){
+          		$(".wait").hide();
+              	console.log(datamsg);
+              	console.log(datamsg.code);
+              	if(datamsg.code==200){//code状态
+              		for(var i=0;i<datamsg.data.list.length;i++){
+              			var html='<li class="aa">'+datamsg.data.list[i].boxName+'</li>';
+              			$("#wrapper ul").append(html);
+              		}               		 
+              	}else{
+              		$(".wait").hide();
+              		alert("暂无数据");
+              	}
+          	},
+          	error: function(res) {
+          		console.log(res);
+          	}
+      	});
+	}
+</script>
+<script>
+	var aaaa=0;	
+	var huadong=0;  	
+	$("#chaxun").click(function(){
+
+		$(".tcdPageCode").show();
+		/*查询开始*/
+		var village=$("#xiaoqu").val();//市县
+		var boxName=$(".menpai").val();//门牌关键字
+		var pageNo="";
+		var pageSize="10";
+		
+			$(".wait").show();
+			$.ajax({
+				url:'http://183.250.161.142:8000/data_fetch/a/box/ydBoxinfo/mobileBoxList',
+	          	type:'post',
+	          	xhrField: {
+	          		withCredentials: true
+		        },
+		        data:{//格式（后台：前端）
+		        	village:village,
+			        boxName:boxName,
+			        pageNo:pageNo,
+			        pageSize:pageSize
+		        },
+		        crossDomain: true,
+		       	dataType:'jsonp',//请求方式
+			  	jsonp:"callback",//Jquery生成验证参数的名称
+		        success: function(datamsg){
+		            console.log(datamsg);
+		            console.log(datamsg.code);
+		            if(datamsg.code==200){//code状态
+		              	var count=datamsg.data.count;
+		              	$(".dangqianye").attr('zs',count);
+		              	xr();
+		            }else{
+		            	$(".wait").hide();
+		            	alert("暂无数据")
+		            }
+		        },
+		        error: function(res) {
+		          	console.log(res);
+		        }
+		    });
+	})  		  		
+	$(".head img").click(function(){
+		history.go(-1)
+	})
+</script>
+</body></html>

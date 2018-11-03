@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>地址查询</title>
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="js/jquery.js"></script>
+<link rel="stylesheet" href="css/pullToRefresh.css" />
+<script src="js/iscroll.js"></script>
+<script src="js/pullToRefresh.js"></script>
+<script src="js/jquery.page.js"></script>
+<style>
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body, button, input, select, textarea {
+	font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+}
+
+#container {
+	min-width: 300px;
+	min-height: 300px;
+}
+
+/*清浮*/
+.clearfix:after {
+	content: "\200B";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+.clearfix {
+	*zoom: 1;
+}
+
+em {
+	font-style: normal;
+	font-weight: normal;
+}
+
+body, html {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.search1 {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	width: 100%;
+}
+
+.search1 div {
+	width: 100%;
+}
+
+.search1 em {
+	margin-left: 3%;
+}
+
+.search1 span {
+	display: block;
+	margin-left: 5%;
+	width: 80%;
+	height: 40px;
+	line-height: 40px;
+	margin: 0 auto;
+	text-align: center;
+	margin-top: 15px;
+	border: 1px solid #999;
+	border-radius: 5px;
+	background-color: #4198ff;
+	color: #fff;
+	font-size: 16px;
+}
+
+.search1 input {
+	display: block;
+	margin-left: 5%;
+	width: 79%;
+	height: 35px;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+#wrapper {
+	overflow-y: scroll !important;
+}
+
+#wrapper {
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+#wrapper::-webkit-scrollbar-track-piece {
+	background-color: rgba(0, 0, 0, 0);
+	border-left: 1px solid rgba(0, 0, 0, 0);
+}
+
+#wrapper::-webkit-scrollbar {
+	width: 5px;
+	height: 13px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#wrapper::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.5);
+	background-clip: padding-box;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	min-height: 28px;
+}
+
+#wrapper::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.head {
+	border-bottom: 1px solid #ddd;
+	height: 40px;
+	width: 100%;
+}
+
+.head span {
+	float: left;
+	display: block;
+	width: 84%;
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+	font-size: 16px;
+}
+
+.head img {
+	float: left;
+	height: 20px;
+	width: 5%;
+	margin-left: 3%;
+	margin-top: 10px;
+}
+
+* {
+	padding: 0;
+	margin: 0
+}
+
+.foot {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	z-index: 100;
+	background: #fff;
+}
+
+.foot ul {
+	border-top: 1px solid #ddd;
+}
+
+.foot ul a {
+	color: #000;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.foot li {
+	float: left;
+	/*width: 25%;*/
+	width: 33%;
+	text-align: center;
+	list-style-type: none;
+}
+
+.b {
+	width: 100%;
+	line-height: 30px;
+	margin-top: -111px;
+	border: 1px solid #ccc;
+}
+
+.b a {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+.li_a {
+	height: 50px;
+	line-height: 50px;
+}
+
+.wait {
+	position: fixed;
+	left: 44%;
+	z-index: 10;
+	display: none;
+}
+
+.biaoji {
+	margin-top: 20px;
+}
+
+.biaoji img {
+	float: left;
+	margin-left: 5px;
+}
+
+.biaoji span {
+	float: left;
+	margin-left: 5px;
+	margin-top: 10px;
+}
+
+.daohang {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	/*padding: 30px 0;*/
+	display: none;
+	border-top: 1px solid #ccc;
+}
+
+.dianji {
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 15px 0;
+	text-decoration: none;
+	font-size: 20px;
+	color: #000;
+}
+
+.guodu {
+	font-size: 18px;
+}
+
+.guodu div {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.guodu h5 {
+	margin-top: 20px;
+	margin-left: 3%;
+}
+
+.guodu span {
+	display: block;
+	margin-top: 20px;
+}
+
+.guodu em {
+	float: left;
+	background: #4198ff;
+	color: #fff;
+	border-radius: 4px;
+	padding: 5px 10px;
+	margin-top: 30px;
+	margin-left: 15%;
+}
+
+.aa {
+	padding: 0 20px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 16px;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
+}
+
+/*分頁樣式*/
+/*	*{ margin:0; padding:0; list-style:none;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:none;}
+.tcdPageCode{position: fixed;left: 0;bottom: 51px;width: 100%;color: #ccc;text-align:center;z-index: 100;background: #fff;height: 50px;line-height: 50px;display: none;}
+.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px; line-height: 25px;  padding: 0 5px;border: 1px solid #ddd; margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca; border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode span.disabled{ display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px; color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}*/
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.tcdPageCode {
+	position: fixed;
+	left: 0;
+	bottom: 51px;
+	width: 100%;
+	color: #ccc;
+	text-align: center;
+	z-index: 100;
+	background: #fff;
+	height: 50px;
+	display: none;
+	line-height: 50px;
+}
+
+.tcdPageCode a {
+	display: inline-block;
+	color: #428bca;
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 2px;
+	border: 1px solid #ddd;
+	margin: 0 2px;
+	border-radius: 4px;
+	vertical-align: middle;
+	font-size: 12px;
+}
+
+.tcdPageCode a:hover {
+	text-decoration: none;
+	border: 1px solid #428bca;
+}
+
+.tcdPageCode span.current {
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 4px;
+	margin: 0 2px;
+	color: #fff;
+	background-color: #428bca;
+	border: 1px solid #428bca;
+	border-radius: 4px;
+	vertical-align: middle;
+	font-size: 12px
+}
+
+.tcdPageCode span.disabled {
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 5px;
+	margin: 0 2px;
+	color: #bfbfbf;
+	background: #f2f2f2;
+	border: 1px solid #bfbfbf;
+	border-radius: 4px;
+	vertical-align: middle;
+	font-size: 13px
+}
+</style>
+</head>
+<body>
+	<div class="head">
+		<img src="image/fanhui.png" alt=""><span>地址查询</span>
+	</div>
+	<div class="search1">
+		<!-- <input type="text" id="xiaoqu" placeholder="请输入小区"> -->
+		<input type="text" class="menpai" placeholder="请输入门牌关键字"> <span
+			id="chaxun">查询</span>
+	</div>
+	<img class="wait" src="image/loading.gif" alt="">
+	<div id="wrapper">
+		<ul>
+
+		</ul>
+	</div>
+	<div class="guodu" style="display: none;">
+		<h5>厦门市湖里区尚忠社514号</h5>
+		<div class="div1"></div>
+		<div class="clearfix">
+			<em class="back">返回</em><em class="go">进入地图</em>
+		</div>
+	</div>
+	<div id="container"></div>
+	<div class="biaoji clearfix" style="display: none;">
+		<img src="image/blueMarker.png" alt=""><span>箱体</span><img
+			src="image/redMarker.png" alt=""><span>门牌</span>
+	</div>
+	<div class="tcdPageCode"></div>
+	<div class="foot" id="footer">
+		<ul class="clearfix">
+			<li><a class="li_a index1">首页</a></li>
+			<li><a class="li_a" href="">地址查询</a></li>
+			<li><a class="li_a xiangtilist">箱体查询</a></li>
+			<!-- <li><a class="li_a chedan">撤单查询</a></li> -->
+		</ul>
+	</div>
+
+	<div class="daohang">
+		<span id="dianji1" class="dianji">腾讯导航</span>
+	</div>
+	<input type="text" class="dangqianye" style="display: none;">
+</body>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script>
+	$(document)
+			.ready(
+					function() {
+						/*权限设置开始*/
+						sessionStorage.getItem('testKey'); // => 返回testKey对应的值
+						console.log(sessionStorage.getItem('testKey'))
+						if (sessionStorage.getItem('testKey') == null) {
+							alert("您未登录无法访问该页面，请登录");
+							window.location.href = "login.html";
+						} else {
+							$(".index1").click(function() {
+								window.location.href = "index.html";
+							})
+							$(".xiangtilist").click(function() {
+								window.location.href = "xiangtilist.html";
+							})
+						}
+						/*权限设置结束*/
+
+						$("#dianji1")
+								.click(
+										function() {//跳转到腾讯导航
+											var jwd = $(this).attr('jwd');
+											var name = $(this).attr('name');
+											console.log(jwd)
+											window.location.href = 'http://apis.map.qq.com/uri/v1/marker?marker=coord:'
+													+ jwd
+													+ ';title:'
+													+ name
+													+ ';addr: ' + name + '';
+										})
+					})
+
+	/*点击input弹出软键盘（让他不影响布局）开始*/
+	var oHeight = $(document).height(); //浏览器当前的高度
+	$(window).resize(function() {
+		if ($(document).height() < oHeight) {
+			$("#footer").css("display", "none");
+		} else {
+			$("#footer").css("display", "block");
+		}
+	});
+	/*点击input弹出软键盘（让他不影响布局）结束*/
+</script>
+<script>
+	function xr(q) {
+		$("#wrapper ul li").remove();
+		$(".wait").show();
+		//var Village=$("#xiaoqu").val();//市县
+		var address = $(".menpai").val();//门牌关键字
+		var pageNo = q;
+		var pageSize = "10";
+		console.log(address);
+		console.log(pageNo);
+		var count = $(".dangqianye").attr('zs');
+		var pages = parseInt(count) / parseInt(pageSize);
+		if (parseInt(count) % 10 > 0) {
+			pages = parseInt(pages) + 1;
+		}
+
+		$(".tcdPageCode").createPage({
+			pageCount : pages,//总共数据条数
+			current : pageNo,//当前页码
+			backFn : function(p) {
+				console.log("p=" + p);
+			}
+		});
+		$(".dangqianye").val(pageNo);
+		$
+				.ajax({
+					url : 'api/getAddressList',
+					type : 'post',
+					xhrField : {
+						withCredentials : true
+					},
+					data : {//格式（后台：前端）
+						address : address,
+						pageNo : pageNo,
+						pageSize : pageSize
+					},
+					crossDomain : true,
+					dataType : 'jsonp',//请求方式
+					jsonp : "callback",//Jquery生成验证参数的名称
+					success : function(datamsg) {
+						$(".wait").hide();
+						console.log(datamsg);
+						console.log(datamsg.code);
+						if (datamsg.code == 200) {//code状态
+							for (var i = 0; i < datamsg.data.list.length; i++) {
+								var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
+										+ datamsg.data.list[i].address
+										+ '</li>';
+								$("#wrapper ul").append(html);
+							}
+							aa()
+						} else if (datamsg.code == 201) {
+							$(".wait").hide();
+						}
+					},
+					error : function(res) {
+						$(".wait").hide();
+						console.log(res);
+					}
+				});
+	}
+
+	$(".head img").click(function() {//返回上一页
+		if ($(".biaoji").css('display') != 'none') {
+			$("#container").hide();
+			$(".biaoji").hide();
+			$(".guodu").show();
+		} else if ($(".guodu").css('display') != 'none') {
+			$(".tcdPageCode").show();
+			$(".guodu").hide();
+			$(".foot").show();
+			$("#wrapper").show();
+			$(".search1").show();
+		} else {
+			history.go(-1)
+		}
+	})
+	var aaaa = 0;
+	var huadong = 0;
+	$("#chaxun").click(function() {
+		$(".tcdPageCode").show();
+		/*查询开始*/
+		//var Village=$("#xiaoqu").val();//市县
+		var address = $(".menpai").val();//门牌关键字
+		var pageNo = "";
+		var pageSize = "10";
+		if (address == "") {
+			alert("请输入门牌关键字")
+		} else {
+			$(".wait").show();
+			$.ajax({
+				url : 'api/getAddressList',
+				type : 'post',
+				xhrField : {
+					withCredentials : true
+				},
+				data : {//格式（后台：前端）
+					address : address,
+					pageNo : pageNo,
+					pageSize : pageSize
+				},
+				crossDomain : true,
+				dataType : 'jsonp',//请求方式
+				jsonp : "callback",//Jquery生成验证参数的名称
+				success : function(datamsg) {
+					console.log(datamsg);
+					console.log(datamsg.code);
+					if (datamsg.code == 200) {//code状态
+						var count = datamsg.data.count;
+						$(".dangqianye").attr('zs', count);
+						xr();
+					} else if (datamsg.code == 201) {
+						$(".wait").hide();
+					}
+				},
+				error : function(res) {
+					$(".wait").hide();
+					console.log(res);
+				}
+			});
+		}
+		/*查询结束*/
+	});
+
+	function aa() {//点击门牌
+		$("#wrapper li").click(
+				function() {
+					var address = $(this).attr('address');
+					var latitude = $(this).attr('latitude');
+					var longitude = $(this).attr('longitude');
+					$.ajax({
+						url : 'api/getNearbyBox',
+						type : 'post',
+						xhrField : {
+							withCredentials : true
+						},
+						data : {
+							address : address,//格式（后台：前端）
+							longitude : longitude,
+							latitude : latitude
+						},
+						crossDomain : true,
+						dataType : 'jsonp',//请求方式
+						jsonp : "callback",//Jquery生成验证参数的名称
+						success : function(datamsg) {
+							console.log(datamsg);
+							if (datamsg.code == 200) {//code状态
+								var center_Name = datamsg.data.address;
+								var center_la = datamsg.data.latitude;
+								var center_long = datamsg.data.longitude;
+								var boxes = datamsg.data.boxes;
+								if (boxes.length == 0) {
+									alert("该门牌无箱体")
+								} else {
+									if (boxes.length == 3) {
+										var xt1_boxName = boxes[0].box_name;
+										var xt1_boxLa = boxes[0].latitude;
+										var xt1_boxLong = boxes[0].longitude;
+										var xt1_boxDist = boxes[0].distance;
+										var xt2_boxName = boxes[1].box_name;
+										var xt2_boxLa = boxes[1].latitude;
+										var xt2_boxLong = boxes[1].longitude;
+										var xt2_boxDist = boxes[1].distance;
+										var xt3_boxName = boxes[2].box_name;
+										var xt3_boxLa = boxes[2].latitude;
+										var xt3_boxLong = boxes[2].longitude;
+										var xt3_boxDist = boxes[2].distance;
+									} else if (boxes.length == 2) {
+										var xt1_boxName = boxes[0].box_name;
+										var xt1_boxLa = boxes[0].latitude;
+										var xt1_boxLong = boxes[0].longitude;
+										var xt1_boxDist = boxes[0].distance;
+										var xt2_boxName = boxes[1].box_name;
+										var xt2_boxLa = boxes[1].latitude;
+										var xt2_boxLong = boxes[1].longitude;
+										var xt2_boxDist = boxes[1].distance;
+										var xt3_boxName = "";
+										var xt3_boxLa = "";
+										var xt3_boxLong = "";
+										var xt3_boxDist = "";
+									} else if (boxes.length == 1) {
+										var xt1_boxName = boxes[0].box_name;
+										var xt1_boxLa = boxes[0].latitude;
+										var xt1_boxLong = boxes[0].longitude;
+										var xt1_boxDist = boxes[0].distance;
+										var xt2_boxName = "";
+										var xt2_boxLa = "";
+										var xt2_boxLong = "";
+										var xt2_boxDist = "";
+										var xt3_boxName = "";
+										var xt3_boxLa = "";
+										var xt3_boxLong = "";
+										var xt3_boxDist = "";
+									}
+
+									$(".guodu .div1 span").remove();
+									$(".guodu h5").text(center_Name);
+									for (var i = 0; i < boxes.length; i++) {
+										var html = "<span>" + boxes[i].box_name
+												+ "</span>";
+										$(".guodu .div1").append(html);
+									}
+									$(".tcdPageCode").hide();
+									$(".guodu").show();
+									$(".foot").hide();
+									$("#wrapper").hide();
+									$(".search1").hide();
+									$(".back").click(function() {
+										$(".guodu").hide();
+										$("#wrapper").show();
+										$(".search1").show();
+										$(".tcdPageCode").show();
+										$(".foot").show();
+									})
+									$(".go").click(
+											function() {
+												$("#container").show();
+												$(".biaoji").show();
+												$(".guodu").hide();
+												init(center_Name, center_la,
+														center_long,
+														xt1_boxName, xt1_boxLa,
+														xt1_boxLong,
+														xt1_boxDist,
+														xt2_boxName, xt2_boxLa,
+														xt2_boxLong,
+														xt2_boxDist,
+														xt3_boxName, xt3_boxLa,
+														xt3_boxLong,
+														xt3_boxDist);
+											})
+								}
+
+							}
+						},
+						error : function(res) {
+							console.log(res);
+						}
+					});
+				})
+	}
+
+	function init(center_Name, center_la, center_long, xt1_boxName, xt1_boxLa,
+			xt1_boxLong, xt1_boxDist, xt2_boxName, xt2_boxLa, xt2_boxLong,
+			xt2_boxDist, xt3_boxName, xt3_boxLa, xt3_boxLong, xt3_boxDist) {
+		var center = new qq.maps.LatLng(center_la, center_long);
+		var anchor = new qq.maps.Point(12, 35), size = new qq.maps.Size(42, 68), origin = new qq.maps.Point(
+				0, 0);
+		var redIcon = new qq.maps.MarkerImage("image/markerRed.png", size,
+				origin, anchor);
+		var map = new qq.maps.Map(document.getElementById("container"), {
+			center : center,
+			zoom : 18
+		});
+		var infoWin = new qq.maps.InfoWindow({
+			map : map
+		});
+		var a2 = xt1_boxLong;
+		var a1 = xt1_boxLa;
+		var b2 = xt2_boxLong;
+		var b1 = xt2_boxLa;
+		var c2 = xt3_boxLong;
+		var c1 = xt3_boxLa;
+		var latlngs = [ new qq.maps.LatLng(a1, a2), new qq.maps.LatLng(b1, b2),
+				new qq.maps.LatLng(c1, c2) ];
+		var arr1 = center_Name;
+		var marker = new qq.maps.Marker({
+			position : center,
+			map : map
+		});
+		qq.maps.event
+				.addListener(
+						marker,
+						'click',
+						function() {
+							infoWin.open();
+							infoWin
+									.setContent('<div style="text-align:center;white-space:'+
+            'nowrap;margin:10px;"> '
+											+ arr1 + '</div>');
+							infoWin.setPosition(center);
+							$("#dianji1").attr("jwd", center);
+							$("#dianji1").attr("name", arr1);
+							$(".daohang").show();
+						});
+		var arr = new Array(xt1_boxName, xt2_boxName, xt3_boxName)
+		var arrDis = new Array(xt1_boxDist, xt2_boxDist, xt3_boxDist)
+		marker.setIcon(redIcon);
+		for (var i = 0; i < latlngs.length; i++) {
+			(function(n) {
+				var marker = new qq.maps.Marker({
+					position : latlngs[n],
+					map : map
+				});
+				qq.maps.event
+						.addListener(
+								marker,
+								'click',
+								function() {
+									infoWin.open();
+									infoWin
+											.setContent('<div style="text-align:center;white-space:'+
+	                'nowrap;margin:10px;"> '
+													+ arr[n]
+													+ '距离：'
+													+ arrDis[n] + '米</div>');
+									infoWin.setPosition(latlngs[n]);
+									$("#dianji1").attr("jwd", latlngs[n]);
+									$("#dianji1").attr("name", arr[n]);
+									// $("#dianji2").attr("jwd",latlngs[n]);
+									// $("#dianji2").attr("name",arr[n]);
+									$(".daohang").show();
+								});
+			})(i);
+		}
+	}
+</script>
+</html>

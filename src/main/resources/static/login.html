@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>宽带地址资源智能化应用</title>
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="./js/jquery.js"></script>
+<script src="./js/jquery.cookie.js"></script>
+<style>
+/*清浮*/
+.clearfix:after {
+	content: "\200B";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+.clearfix {
+	*zoom: 1;
+}
+
+em {
+	font-style: normal;
+	font-weight: normal;
+}
+
+img {
+	display: block;
+	width: 20%;
+	margin: 0 auto;
+	margin-top: 150px;
+}
+
+div {
+	width: 75%;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+div em {
+	float: left;
+	height: 25px;
+	line-height: 25px;
+	width: 20%;
+}
+
+div input {
+	float: left;
+	height: 25px;
+	line-height: 25px;
+	width: 78%;
+}
+
+#login {
+	display: block;
+	width: 20%;
+	height: 30px;
+	line-height: 30px;
+	margin: 0 auto;
+	background-color: #4198ff;
+	border-radius: 5px;
+	text-align: center;
+	margin-top: 20px;
+	color: #fff;
+}
+
+.topname {
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	font-size: 28px;
+	color: #4098ff;
+	margin-top: 125px;
+	margin-bottom: 90px;
+	font-family: Helvetica, Georgia, Arial, sans-serif, 黑体;
+	letter-spacing: 4px;
+}
+</style>
+
+</head>
+<body>
+	<div class="topname">宽带地址资源智能化应用</div>
+	<div class="clearfix">
+		<em>姓名：</em><input id="name" type="text">
+	</div>
+	<div class="clearfix">
+		<em>密码：</em><input id="psd" type="password">
+	</div>
+	<span id="login">登录</span>
+</body>
+
+
+<script>
+	var storage = window.localStorage;
+	$("#name").val(storage["name"]);
+	$("#psd").val(storage["pwd"]);
+	$("#login").click(function() {
+		var name = $("#name").val();
+		var psd = $("#psd").val();
+		console.log(name);
+		console.log(psd);
+		$.ajax({
+			url : 'api/login',
+			type : 'post',
+			xhrField : {
+				withCredentials : true
+			},
+			data : {
+				loginName : name,//格式（后台：前端）
+				password : psd
+			},
+			crossDomain : true,
+			dataType : 'jsonp',//请求方式
+			jsonp : "callback",//Jquery生成验证参数的名称
+			success : function(datamsg) {
+				console.log(datamsg);
+				if (datamsg.code == 200) {//code状态
+					var role = datamsg.data.roleName;
+					sessionStorage.setItem('testKey', role); // 存入一个值
+					//初始化本地存储
+					var storage = window.localStorage;
+					//将存储成 json对象
+					storage["name"] = name;
+					storage["pwd"] = psd;
+					window.location.href = "index.html";
+				} else {
+					alert("姓名密码错误")
+				}
+			},
+			error : function(res) {
+				console.log(res);
+			}
+		});
+	});
+</script>
+</html>
