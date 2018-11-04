@@ -46,6 +46,25 @@ public class AddressApi extends BaseApi {
 		log.info(JSON.toJSONString(result));
 		return JsonResultMethod.code_200("The request completed successfully.", result);
 	}
+	
+
+	@ResponseBody
+	@RequestMapping(value = "/api/getBoxList", produces = "application/json; charset=utf-8", method = {
+			RequestMethod.GET, RequestMethod.POST })
+	public JsonResult getBoxList(HttpServletRequest request, HttpSession session) {
+
+		String pageNo = request.getParameter("pageNo");
+		pageNo = StringUtil.isEmpty(pageNo) ? "0" : pageNo;
+		String pageSize = request.getParameter("pageSize");
+		pageSize = StringUtil.isEmpty(pageSize) ? "10" : pageSize;
+
+		String zoneName = request.getParameter("zoneName");
+		String boxName = request.getParameter("boxName");
+		QueryResult result = addressService.getBoxList(zoneName, boxName, Integer.parseInt(pageNo),
+				Integer.parseInt(pageSize));
+		log.info(JSON.toJSONString(result));
+		return JsonResultMethod.code_200("The request completed successfully.", result);
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/api/getNearbyBox", produces = "application/json; charset=utf-8", method = {

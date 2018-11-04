@@ -30,6 +30,26 @@
 	</select>
 
 
+	<select id="getBoxList" resultMap="BoxesResultMap">
+		select
+		box_name,
+		address,
+		mar_lon as longitude,
+		mar_lat as latitude
+		from box_tbl
+		where 1 = 1
+		<if test="zoneName != null">
+			and zone_name like
+			concat(concat("%",#{zoneName}),"%")
+		</if>
+		<if test="boxName != null">
+			and box_name like
+			concat(concat("%",#{boxName}),"%")
+		</if>
+	</select>
+
+
+
 	<select id="getAddressByKeyword" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -63,9 +83,11 @@
 		) * 6370996.81 AS distance
 		FROM
 		box_tbl
-		where acos(
+		where
+		acos(
 		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( mar_lat
-		* pi( ) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180-
+		*
+		pi( ) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180-
 		mar_lon * pi( ) / 180 ) + sin(#{latitude,jdbcType=DOUBLE} * pi( ) /
 		180 ) * sin( mar_lat * pi( ) / 180 )
 		) * 6370996.81 <![CDATA[<= ]]>

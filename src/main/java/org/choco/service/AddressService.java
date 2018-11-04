@@ -71,4 +71,17 @@ public class AddressService {
 		return result;
 	}
 
+	public QueryResult getBoxList(String zoneName, String boxName, int pageNo, int pageSize) {
+
+		PageHelper.startPage(pageNo, pageSize);
+
+		List list = mapper.getBoxList(zoneName, boxName);
+		QueryResult result = new QueryResult();
+		result.setList(list);
+		result.setCount(((Page)list).getTotal());
+		result.setPageNo(((Page)list).getPageNum());
+		result.setPageSize(((Page)list).getPageSize());
+		return result;
+	}
+
 }

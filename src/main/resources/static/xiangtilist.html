@@ -237,7 +237,7 @@ a:hover{ text-decoration:none;}
 	function xr(q){
 		$("#wrapper ul li").remove();
 		$(".wait").show();
-		var village=$("#xiaoqu").val();//市县
+		var zoneName=$("#xiaoqu").val();//市县
 		var boxName=$(".menpai").val();//门牌关键字
 		var pageNo=q;
 		var pageSize="15";
@@ -258,13 +258,13 @@ a:hover{ text-decoration:none;}
         });     
 		$(".dangqianye").val(pageNo);
 		$.ajax({
-			url:'http://localhost:8080/api/getBoxList',
+			url:'api/getBoxList',
           	type:'post',
           	xhrField: {
           		withCredentials: true
           	},
           	data:{//格式（后台：前端）
-	            village:village,
+          		zoneName:zoneName,
 		        boxName:boxName,
 		        pageNo:pageNo,
 		        pageSize:pageSize
@@ -278,7 +278,7 @@ a:hover{ text-decoration:none;}
               	console.log(datamsg.code);
               	if(datamsg.code==200){//code状态
               		for(var i=0;i<datamsg.data.list.length;i++){
-              			var html='<li class="aa">'+datamsg.data.list[i].boxName+'</li>';
+              			var html='<li class="aa">'+datamsg.data.list[i].box_name+'</li>';
               			$("#wrapper ul").append(html);
               		}               		 
               	}else{
@@ -299,20 +299,20 @@ a:hover{ text-decoration:none;}
 
 		$(".tcdPageCode").show();
 		/*查询开始*/
-		var village=$("#xiaoqu").val();//市县
+		var zoneName=$("#xiaoqu").val();//市县
 		var boxName=$(".menpai").val();//门牌关键字
 		var pageNo="";
 		var pageSize="10";
 		
 			$(".wait").show();
 			$.ajax({
-				url:'http://183.250.161.142:8000/data_fetch/a/box/ydBoxinfo/mobileBoxList',
+				url:'api/getBoxList',
 	          	type:'post',
 	          	xhrField: {
 	          		withCredentials: true
 		        },
 		        data:{//格式（后台：前端）
-		        	village:village,
+		        	zoneName:zoneName,
 			        boxName:boxName,
 			        pageNo:pageNo,
 			        pageSize:pageSize
