@@ -75,12 +75,12 @@
 		address,
 		mar_lon as longitude,
 		mar_lat as latitude,
-		acos(
+		round(acos(
 		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( mar_lat * pi(
 		) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180- mar_lon *
 		pi( ) / 180 ) + sin(#{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * sin(
 		mar_lat * pi( ) / 180 )
-		) * 6370996.81 AS distance
+		) * 6370996.81, 2) AS distance
 		FROM
 		box_tbl
 		where

@@ -454,6 +454,14 @@ a:hover {
 	/*点击input弹出软键盘（让他不影响布局）结束*/
 </script>
 <script>
+	function isEmpty(obj){
+	    if(typeof obj == "undefined" || obj == null || obj == ""){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+
 	function xr(q) {
 		$("#wrapper ul li").remove();
 		$(".wait").show();
@@ -499,7 +507,7 @@ a:hover {
 						if (datamsg.code == 200) {//code状态
 							for (var i = 0; i < datamsg.data.list.length; i++) {
 								var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
-										+ datamsg.data.list[i].address
+										+ datamsg.data.list[i].address + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】': '') 
 										+ '</li>';
 								$("#wrapper ul").append(html);
 							}
@@ -651,7 +659,7 @@ a:hover {
 									$(".guodu .div1 span").remove();
 									$(".guodu h5").text(center_Name);
 									for (var i = 0; i < boxes.length; i++) {
-										var html = "<span>" + boxes[i].box_name
+										var html = "<span>" + boxes[i].box_name + '；距离：' + boxes[i].distance
 												+ "</span>";
 										$(".guodu .div1").append(html);
 									}
@@ -754,10 +762,10 @@ a:hover {
 								function() {
 									infoWin.open();
 									infoWin
-											.setContent('<div style="text-align:center;white-space:'+
+											.setContent('<div style="text-align:left;white-space:'+
 	                'nowrap;margin:10px;"> '
 													+ arr[n]
-													+ '距离：'
+													+ '<br />距离：'
 													+ arrDis[n] + '米</div>');
 									infoWin.setPosition(latlngs[n]);
 									$("#dianji1").attr("jwd", latlngs[n]);
