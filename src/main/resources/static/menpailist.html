@@ -23,7 +23,7 @@ body, button, input, select, textarea {
 
 #container {
 	min-width: 300px;
-	min-height: 300px;
+	min-height: 600px;
 }
 
 /*清浮*/
@@ -571,7 +571,30 @@ a:hover {
 					if (datamsg.code == 200) {//code状态
 						var count = datamsg.data.count;
 						$(".dangqianye").attr('zs', count);
-						xr();
+// 						xr();
+						
+						// 避免第一页加载，两次查询 BEGIN
+				        var pages = parseInt(count) / parseInt(pageSize);
+				        if (parseInt(count) % 10 > 0) {
+				            pages = parseInt(pages) + 1;
+				        }
+				        $(".tcdPageCode").createPage({
+				            pageCount : pages,//总共数据条数
+				            current : pageNo,//当前页码
+				            backFn : function(p) {
+				                console.log("p=" + p);
+				            }
+				        });
+				        $(".dangqianye").val(pageNo);
+				        for (var i = 0; i < datamsg.data.list.length; i++) {
+                            var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
+                                    + datamsg.data.list[i].address + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】': '') 
+                                    + '</li>';
+                            $("#wrapper ul").append(html);
+                        }
+                        aa()
+                        // 避免第一页加载，两次查询 END
+                        
 					} else if (datamsg.code == 201) {
 						$(".wait").hide();
 					}
@@ -613,7 +636,7 @@ a:hover {
 								var center_long = datamsg.data.longitude;
 								var boxes = datamsg.data.boxes;
 								if (boxes.length == 0) {
-									alert("该门牌无箱体")
+									alert("该门牌未覆盖，请走预登记！")
 								} else {
 									if (boxes.length == 3) {
 										var xt1_boxName = boxes[0].box_name;
