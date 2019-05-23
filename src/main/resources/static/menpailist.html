@@ -381,7 +381,7 @@ a:hover {
 		</ul>
 	</div>
 	<div class="guodu" style="display: none;">
-		<h5>厦门市湖里区尚忠社514号</h5>
+		<h5></h5>
 		<div class="div1"></div>
 		<div class="clearfix">
 			<em class="back">返回</em><em class="go">进入地图</em>
@@ -409,396 +409,428 @@ a:hover {
 </body>
 <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=CWLBZ-TIDKF-PEWJO-JYZWJ-CS3QT-EKBVV"></script>
 <script>
-	$(document)
-			.ready(
-					function() {
-						/*权限设置开始*/
-						sessionStorage.getItem('testKey'); // => 返回testKey对应的值
-						console.log(sessionStorage.getItem('testKey'))
-						if (sessionStorage.getItem('testKey') == null) {
-							alert("您未登录无法访问该页面，请登录");
-							window.location.href = "login.html";
-						} else {
-							$(".index1").click(function() {
-								window.location.href = "index.html";
-							})
-							$(".xiangtilist").click(function() {
-								window.location.href = "xiangtilist.html";
-							})
-						}
-						/*权限设置结束*/
+    $(document)
+        .ready(
+            function() {
+                /*权限设置开始*/
+                sessionStorage.getItem('testKey'); // => 返回testKey对应的值
+                console.log(sessionStorage.getItem('testKey'))
+//                 if (sessionStorage.getItem('testKey') == null) {
+//                     alert("您未登录无法访问该页面，请登录");
+//                     window.location.href = "login.html";
+//                 } else {
+                    $(".index1").click(function() {
+                        window.location.href = "index.html";
+                    })
+                    $(".xiangtilist").click(function() {
+                        window.location.href = "xiangtilist.html";
+                    })
+//                 }
+                /*权限设置结束*/
 
-						$("#dianji1")
-								.click(
-										function() {//跳转到腾讯导航
-											var jwd = $(this).attr('jwd');
-											var name = $(this).attr('name');
-											console.log(jwd)
-											window.location.href = 'http://apis.map.qq.com/uri/v1/marker?marker=coord:'
-													+ jwd
-													+ ';title:'
-													+ name
-													+ ';addr: ' + name + '';
-										})
-					})
+                $("#dianji1")
+                    .click(
+                        function() {//跳转到腾讯导航
+                            var jwd = $(this).attr('jwd');
+                            var name = $(this).attr('name');
+                            console.log(jwd)
+                            window.location.href = 'http://apis.map.qq.com/uri/v1/marker?marker=coord:'
+                                + jwd
+                                + ';coord_type=1;title:'
+                                + name
+                                + ';addr: '
+                                + name
+                                + '';
+                        })
+            })
 
-	/*点击input弹出软键盘（让他不影响布局）开始*/
-	var oHeight = $(document).height(); //浏览器当前的高度
-	$(window).resize(function() {
-		if ($(document).height() < oHeight) {
-			$("#footer").css("display", "none");
-		} else {
-			$("#footer").css("display", "block");
-		}
-	});
-	/*点击input弹出软键盘（让他不影响布局）结束*/
+    /*点击input弹出软键盘（让他不影响布局）开始*/
+    var oHeight = $(document).height(); //浏览器当前的高度
+    $(window).resize(function() {
+        if ($(document).height() < oHeight) {
+            $("#footer").css("display", "none");
+        } else {
+            $("#footer").css("display", "block");
+        }
+    });
+    /*点击input弹出软键盘（让他不影响布局）结束*/
 </script>
 <script>
-	function isEmpty(obj){
-	    if(typeof obj == "undefined" || obj == null || obj == ""){
-	        return true;
-	    }else{
-	        return false;
-	    }
-	}
+    function isEmpty(obj) {
+        if (typeof obj == "undefined" || obj == null || obj == "") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	function xr(q) {
-		$("#wrapper ul li").remove();
-		$(".wait").show();
-		//var Village=$("#xiaoqu").val();//市县
-		var address = $(".menpai").val();//门牌关键字
-		var pageNo = q;
-		var pageSize = "10";
-		console.log(address);
-		console.log(pageNo);
-		var count = $(".dangqianye").attr('zs');
-		var pages = parseInt(count) / parseInt(pageSize);
-		if (parseInt(count) % 10 > 0) {
-			pages = parseInt(pages) + 1;
-		}
+    function xr(q) {
+        $("#wrapper ul li").remove();
+        $(".wait").show();
+        //var Village=$("#xiaoqu").val();//市县
+        var address = $(".menpai").val();//门牌关键字
+        var pageNo = q;
+        var pageSize = "10";
+        console.log(address);
+        console.log(pageNo);
+        var count = $(".dangqianye").attr('zs');
+        var pages = parseInt(count) / parseInt(pageSize);
+        if (parseInt(count) % 10 > 0) {
+            pages = parseInt(pages) + 1;
+        }
 
-		$(".tcdPageCode").createPage({
-			pageCount : pages,//总共数据条数
-			current : pageNo,//当前页码
-			backFn : function(p) {
-				console.log("p=" + p);
-			}
-		});
-		$(".dangqianye").val(pageNo);
-		$
-				.ajax({
-					url : 'api/getAddressList',
-					type : 'post',
-					xhrField : {
-						withCredentials : true
-					},
-					data : {//格式（后台：前端）
-						address : address,
-						pageNo : pageNo,
-						pageSize : pageSize
-					},
-					crossDomain : true,
-					dataType : 'jsonp',//请求方式
-					jsonp : "callback",//Jquery生成验证参数的名称
-					success : function(datamsg) {
-						$(".wait").hide();
-						console.log(datamsg);
-						console.log(datamsg.code);
-						if (datamsg.code == 200) {//code状态
-							for (var i = 0; i < datamsg.data.list.length; i++) {
-								var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
-										+ datamsg.data.list[i].address + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】': '') 
-										+ '</li>';
-								$("#wrapper ul").append(html);
-							}
-							aa()
-						} else if (datamsg.code == 201) {
-							$(".wait").hide();
-						}
-					},
-					error : function(res) {
-						$(".wait").hide();
-						console.log(res);
-					}
-				});
-	}
-
-	$(".head img").click(function() {//返回上一页
-		if ($(".biaoji").css('display') != 'none') {
-			$("#container").hide();
-			$(".biaoji").hide();
-			$(".guodu").show();
-		} else if ($(".guodu").css('display') != 'none') {
-			$(".tcdPageCode").show();
-			$(".guodu").hide();
-			$(".foot").show();
-			$("#wrapper").show();
-			$(".search1").show();
-		} else {
-			history.go(-1)
-		}
-	})
-	var aaaa = 0;
-	var huadong = 0;
-	$("#chaxun").click(function() {
-		$(".tcdPageCode").show();
-		/*查询开始*/
-		//var Village=$("#xiaoqu").val();//市县
-		var address = $(".menpai").val();//门牌关键字
-		var pageNo = "";
-		var pageSize = "10";
-		if (address == "") {
-			alert("请输入门牌关键字")
-		} else {
-			$(".wait").show();
-			$.ajax({
-				url : 'api/getAddressList',
-				type : 'post',
-				xhrField : {
-					withCredentials : true
-				},
-				data : {//格式（后台：前端）
-					address : address,
-					pageNo : pageNo,
-					pageSize : pageSize
-				},
-				crossDomain : true,
-				dataType : 'jsonp',//请求方式
-				jsonp : "callback",//Jquery生成验证参数的名称
-				success : function(datamsg) {
-					console.log(datamsg);
-					console.log(datamsg.code);
-					if (datamsg.code == 200) {//code状态
-						var count = datamsg.data.count;
-						$(".dangqianye").attr('zs', count);
-// 						xr();
-						
-						// 避免第一页加载，两次查询 BEGIN
-				        var pages = parseInt(count) / parseInt(pageSize);
-				        if (parseInt(count) % 10 > 0) {
-				            pages = parseInt(pages) + 1;
-				        }
-				        $(".tcdPageCode").createPage({
-				            pageCount : pages,//总共数据条数
-				            current : pageNo,//当前页码
-				            backFn : function(p) {
-				                console.log("p=" + p);
-				            }
-				        });
-				        $(".dangqianye").val(pageNo);
-				        for (var i = 0; i < datamsg.data.list.length; i++) {
+        $(".tcdPageCode").createPage({
+            pageCount : pages,//总共数据条数
+            current : pageNo,//当前页码
+            backFn : function(p) {
+                console.log("p=" + p);
+            }
+        });
+        $(".dangqianye").val(pageNo);
+        $
+            .ajax({
+                url : 'http://112.5.125.85:9001/choco/api/getAddressList',
+                type : 'post',
+                xhrField : {
+                    withCredentials : true
+                },
+                data : {//格式（后台：前端）
+                    address : address,
+                    pageNo : pageNo,
+                    pageSize : pageSize
+                },
+                crossDomain : true,
+                dataType : 'jsonp',//请求方式
+                jsonp : "callback",//Jquery生成验证参数的名称
+                success : function(datamsg) {
+                    $(".wait").hide();
+                    console.log(datamsg);
+                    console.log(datamsg.code);
+                    if (datamsg.code == 200) {//code状态
+                        for (var i = 0; i < datamsg.data.list.length; i++) {
                             var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
-                                    + datamsg.data.list[i].address + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】': '') 
-                                    + '</li>';
+                                + datamsg.data.list[i].address
+                                + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】'
+                                    : '') + '</li>';
                             $("#wrapper ul").append(html);
                         }
                         aa()
-                        // 避免第一页加载，两次查询 END
-                        
-					} else if (datamsg.code == 201) {
-						$(".wait").hide();
-					}
-				},
-				error : function(res) {
-					$(".wait").hide();
-					console.log(res);
-				}
-			});
-		}
-		/*查询结束*/
-	});
+                    } else if (datamsg.code == 201) {
+                        $(".wait").hide();
+                    }
+                },
+                error : function(res) {
+                    $(".wait").hide();
+                    console.log(res);
+                }
+            });
+    }
 
-	function aa() {//点击门牌
-		$("#wrapper li").click(
-				function() {
-					var address = $(this).attr('address');
-					var latitude = $(this).attr('latitude');
-					var longitude = $(this).attr('longitude');
-					$.ajax({
-						url : 'api/getNearbyBox',
-						type : 'post',
-						xhrField : {
-							withCredentials : true
-						},
-						data : {
-							address : address,//格式（后台：前端）
-							longitude : longitude,
-							latitude : latitude
-						},
-						crossDomain : true,
-						dataType : 'jsonp',//请求方式
-						jsonp : "callback",//Jquery生成验证参数的名称
-						success : function(datamsg) {
-							console.log(datamsg);
-							if (datamsg.code == 200) {//code状态
-								var center_Name = datamsg.data.address;
-								var center_la = datamsg.data.latitude;
-								var center_long = datamsg.data.longitude;
-								var boxes = datamsg.data.boxes;
-								if (boxes.length == 0) {
-									alert("该门牌未覆盖，请走预登记！")
-								} else {
-									if (boxes.length == 3) {
-										var xt1_boxName = boxes[0].box_name;
-										var xt1_boxLa = boxes[0].latitude;
-										var xt1_boxLong = boxes[0].longitude;
-										var xt1_boxDist = boxes[0].distance;
-										var xt2_boxName = boxes[1].box_name;
-										var xt2_boxLa = boxes[1].latitude;
-										var xt2_boxLong = boxes[1].longitude;
-										var xt2_boxDist = boxes[1].distance;
-										var xt3_boxName = boxes[2].box_name;
-										var xt3_boxLa = boxes[2].latitude;
-										var xt3_boxLong = boxes[2].longitude;
-										var xt3_boxDist = boxes[2].distance;
-									} else if (boxes.length == 2) {
-										var xt1_boxName = boxes[0].box_name;
-										var xt1_boxLa = boxes[0].latitude;
-										var xt1_boxLong = boxes[0].longitude;
-										var xt1_boxDist = boxes[0].distance;
-										var xt2_boxName = boxes[1].box_name;
-										var xt2_boxLa = boxes[1].latitude;
-										var xt2_boxLong = boxes[1].longitude;
-										var xt2_boxDist = boxes[1].distance;
-										var xt3_boxName = "";
-										var xt3_boxLa = "";
-										var xt3_boxLong = "";
-										var xt3_boxDist = "";
-									} else if (boxes.length == 1) {
-										var xt1_boxName = boxes[0].box_name;
-										var xt1_boxLa = boxes[0].latitude;
-										var xt1_boxLong = boxes[0].longitude;
-										var xt1_boxDist = boxes[0].distance;
-										var xt2_boxName = "";
-										var xt2_boxLa = "";
-										var xt2_boxLong = "";
-										var xt2_boxDist = "";
-										var xt3_boxName = "";
-										var xt3_boxLa = "";
-										var xt3_boxLong = "";
-										var xt3_boxDist = "";
-									}
+    $(".head img").click(function() {//返回上一页
+        if ($(".biaoji").css('display') != 'none') {
+            $("#container").hide();
+            $(".biaoji").hide();
+            $(".guodu").show();
+        } else if ($(".guodu").css('display') != 'none') {
+            $(".tcdPageCode").show();
+            $(".guodu").hide();
+            $(".foot").show();
+            $("#wrapper").show();
+            $(".search1").show();
+        } else {
+            history.go(-1)
+        }
+    })
+    var aaaa = 0;
+    var huadong = 0;
+    $("#chaxun")
+        .click(
+            function() {
+                $(".tcdPageCode").show();
+                /*查询开始*/
+                //var Village=$("#xiaoqu").val();//市县
+                var address = $(".menpai").val();//门牌关键字
+                var pageNo = "";
+                var pageSize = "10";
+                if (address == "") {
+                    alert("请输入门牌关键字")
+                } else {
+                    $(".wait").show();
+                    $
+                        .ajax({
+                            url : 'http://112.5.125.85:9001/choco/api/getAddressList',
+                            type : 'post',
+                            xhrField : {
+                                withCredentials : true
+                            },
+                            data : {//格式（后台：前端）
+                                address : address,
+                                pageNo : pageNo,
+                                pageSize : pageSize
+                            },
+                            crossDomain : true,
+                            dataType : 'jsonp',//请求方式
+                            jsonp : "callback",//Jquery生成验证参数的名称
+                            success : function(datamsg) {
+                                console.log(datamsg);
+                                console.log(datamsg.code);
+                                if (datamsg.code == 200) {//code状态
+                                    var count = datamsg.data.count;
+                                    $(".dangqianye").attr('zs', count);
+                                    // 						xr();
 
-									$(".guodu .div1 span").remove();
-									$(".guodu h5").text(center_Name);
-									for (var i = 0; i < boxes.length; i++) {
-										var html = "<span>" + boxes[i].box_name + '；距离：' + boxes[i].distance
-												+ "</span>";
-										$(".guodu .div1").append(html);
-									}
-									$(".tcdPageCode").hide();
-									$(".guodu").show();
-									$(".foot").hide();
-									$("#wrapper").hide();
-									$(".search1").hide();
-									$(".back").click(function() {
-										$(".guodu").hide();
-										$("#wrapper").show();
-										$(".search1").show();
-										$(".tcdPageCode").show();
-										$(".foot").show();
-									})
-									$(".go").click(
-											function() {
-												$("#container").show();
-												$(".biaoji").show();
-												$(".guodu").hide();
-												init(center_Name, center_la,
-														center_long,
-														xt1_boxName, xt1_boxLa,
-														xt1_boxLong,
-														xt1_boxDist,
-														xt2_boxName, xt2_boxLa,
-														xt2_boxLong,
-														xt2_boxDist,
-														xt3_boxName, xt3_boxLa,
-														xt3_boxLong,
-														xt3_boxDist);
-											})
-								}
+                                    // 避免第一页加载，两次查询 BEGIN
+                                    var pages = parseInt(count)
+                                        / parseInt(pageSize);
+                                    if (parseInt(count) % 10 > 0) {
+                                        pages = parseInt(pages) + 1;
+                                    }
+                                    $(".tcdPageCode").createPage({
+                                        pageCount : pages,//总共数据条数
+                                        current : pageNo,//当前页码
+                                        backFn : function(p) {
+                                            console.log("p=" + p);
+                                        }
+                                    });
+                                    $(".dangqianye").val(pageNo);
+                                    for (var i = 0; i < datamsg.data.list.length; i++) {
+                                        var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
+                                            + datamsg.data.list[i].address
+                                            + (isEmpty(datamsg.data.list[i].latitude) ? '【地址无经纬度】'
+                                                : '') + '</li>';
+                                        $("#wrapper ul").append(html);
+                                    }
+                                    aa()
+                                    // 避免第一页加载，两次查询 END
 
-							}
-						},
-						error : function(res) {
-							console.log(res);
-						}
-					});
-				})
-	}
+                                } else if (datamsg.code == 201) {
+                                    $(".wait").hide();
+                                }
+                            },
+                            error : function(res) {
+                                $(".wait").hide();
+                                console.log(res);
+                            }
+                        });
+                }
+                /*查询结束*/
+            });
 
-	function init(center_Name, center_la, center_long, xt1_boxName, xt1_boxLa,
-			xt1_boxLong, xt1_boxDist, xt2_boxName, xt2_boxLa, xt2_boxLong,
-			xt2_boxDist, xt3_boxName, xt3_boxLa, xt3_boxLong, xt3_boxDist) {
-		var center = new qq.maps.LatLng(center_la, center_long);
-		var anchor = new qq.maps.Point(12, 35), size = new qq.maps.Size(42, 68), origin = new qq.maps.Point(
-				0, 0);
-		var redIcon = new qq.maps.MarkerImage("image/markerRed.png", size,
-				origin, anchor);
-		var map = new qq.maps.Map(document.getElementById("container"), {
-			center : center,
-			zoom : 18
-		});
-		var infoWin = new qq.maps.InfoWindow({
-			map : map
-		});
-		var a2 = xt1_boxLong;
-		var a1 = xt1_boxLa;
-		var b2 = xt2_boxLong;
-		var b1 = xt2_boxLa;
-		var c2 = xt3_boxLong;
-		var c1 = xt3_boxLa;
-		var latlngs = [ new qq.maps.LatLng(a1, a2), new qq.maps.LatLng(b1, b2),
-				new qq.maps.LatLng(c1, c2) ];
-		var arr1 = center_Name;
-		var marker = new qq.maps.Marker({
-			position : center,
-			map : map
-		});
-		qq.maps.event
-				.addListener(
-						marker,
-						'click',
-						function() {
-							infoWin.open();
-							infoWin
-									.setContent('<div style="text-align:center;white-space:'+
+    function aa() {//点击门牌
+        $("#wrapper li").click(
+            function() {
+                var address = $(this).attr('address');
+                var latitude = $(this).attr('latitude');
+                var longitude = $(this).attr('longitude');
+                $.ajax({
+                    url : 'http://112.5.125.85:9001/choco/api/getNearbyBox',
+                    type : 'post',
+                    xhrField : {
+                        withCredentials : true
+                    },
+                    data : {
+                        address : address,//格式（后台：前端）
+                        longitude : longitude,
+                        latitude : latitude
+                    },
+                    crossDomain : true,
+                    dataType : 'jsonp',//请求方式
+                    jsonp : "callback",//Jquery生成验证参数的名称
+                    success : function(datamsg) {
+                        console.log(datamsg);
+                        if (datamsg.code == 200) {//code状态
+                            var center_Name = datamsg.data.address;
+                            var center_la = datamsg.data.latitude;
+                            var center_long = datamsg.data.longitude;
+                            var boxes = datamsg.data.boxes;
+                            if (boxes.length == 0) {
+                                alert("该门牌未覆盖，请走预登记！")
+                            } else {
+                                if (boxes.length == 3) {
+                                    var xt1_boxName = boxes[0].box_name;
+                                    var xt1_boxLa = boxes[0].latitude;
+                                    var xt1_boxLong = boxes[0].longitude;
+                                    var xt1_boxDist = boxes[0].distance;
+                                    var xt2_boxName = boxes[1].box_name;
+                                    var xt2_boxLa = boxes[1].latitude;
+                                    var xt2_boxLong = boxes[1].longitude;
+                                    var xt2_boxDist = boxes[1].distance;
+                                    var xt3_boxName = boxes[2].box_name;
+                                    var xt3_boxLa = boxes[2].latitude;
+                                    var xt3_boxLong = boxes[2].longitude;
+                                    var xt3_boxDist = boxes[2].distance;
+                                } else if (boxes.length == 2) {
+                                    var xt1_boxName = boxes[0].box_name;
+                                    var xt1_boxLa = boxes[0].latitude;
+                                    var xt1_boxLong = boxes[0].longitude;
+                                    var xt1_boxDist = boxes[0].distance;
+                                    var xt2_boxName = boxes[1].box_name;
+                                    var xt2_boxLa = boxes[1].latitude;
+                                    var xt2_boxLong = boxes[1].longitude;
+                                    var xt2_boxDist = boxes[1].distance;
+                                    var xt3_boxName = "";
+                                    var xt3_boxLa = "";
+                                    var xt3_boxLong = "";
+                                    var xt3_boxDist = "";
+                                } else if (boxes.length == 1) {
+                                    var xt1_boxName = boxes[0].box_name;
+                                    var xt1_boxLa = boxes[0].latitude;
+                                    var xt1_boxLong = boxes[0].longitude;
+                                    var xt1_boxDist = boxes[0].distance;
+                                    var xt2_boxName = "";
+                                    var xt2_boxLa = "";
+                                    var xt2_boxLong = "";
+                                    var xt2_boxDist = "";
+                                    var xt3_boxName = "";
+                                    var xt3_boxLa = "";
+                                    var xt3_boxLong = "";
+                                    var xt3_boxDist = "";
+                                }
+
+                                $(".guodu .div1 span").remove();
+                                $(".guodu h5").text(center_Name);
+                                for (var i = 0; i < boxes.length; i++) {
+                                    var html = "<span>" + boxes[i].box_name
+                                        + '；距离：' + boxes[i].distance
+                                        + "</span>";
+                                    $(".guodu .div1").append(html);
+                                }
+                                $(".tcdPageCode").hide();
+                                $(".guodu").show();
+                                $(".foot").hide();
+                                $("#wrapper").hide();
+                                $(".search1").hide();
+                                $(".back").click(function() {
+                                    $(".guodu").hide();
+                                    $("#wrapper").show();
+                                    $(".search1").show();
+                                    $(".tcdPageCode").show();
+                                    $(".foot").show();
+                                })
+                                $(".go")
+                                    .click(
+                                        function() {
+                                            $("#container").show();
+                                            $(".biaoji").show();
+                                            $(".guodu").hide();
+                                            init(center_Name, center_la,
+                                                center_long, xt1_boxName,
+                                                xt1_boxLa, xt1_boxLong,
+                                                xt1_boxDist, xt2_boxName,
+                                                xt2_boxLa, xt2_boxLong,
+                                                xt2_boxDist, xt3_boxName,
+                                                xt3_boxLa, xt3_boxLong,
+                                                xt3_boxDist);
+                                        })
+                            }
+
+                        }
+                    },
+                    error : function(res) {
+                        console.log(res);
+                    }
+                });
+            })
+    }
+
+    function init(center_Name, center_la, center_long, xt1_boxName, xt1_boxLa,
+        xt1_boxLong, xt1_boxDist, xt2_boxName, xt2_boxLa, xt2_boxLong,
+        xt2_boxDist, xt3_boxName, xt3_boxLa, xt3_boxLong, xt3_boxDist) {
+        var center = new qq.maps.LatLng(center_la, center_long);
+        var anchor = new qq.maps.Point(12, 35), size = new qq.maps.Size(42, 68), origin = new qq.maps.Point(
+            0, 0);
+        var redIcon = new qq.maps.MarkerImage("image/markerRed.png", size,
+            origin, anchor);
+        var center_mar;
+        qq.maps.convertor.translate(center, 1, function(res){
+            center_mar = res[0];
+        });
+        var map = new qq.maps.Map(document.getElementById("container"), {
+            center : center_mar,
+            zoom : 18
+        });
+        var infoWin = new qq.maps.InfoWindow({
+            map : map
+        });
+        var a2 = xt1_boxLong;
+        var a1 = xt1_boxLa;
+        var b2 = xt2_boxLong;
+        var b1 = xt2_boxLa;
+        var c2 = xt3_boxLong;
+        var c1 = xt3_boxLa;
+        var latlngs = [ new qq.maps.LatLng(a1, a2), new qq.maps.LatLng(b1, b2),
+            new qq.maps.LatLng(c1, c2) ];
+        var arr1 = center_Name;
+        /*
+        var marker = new qq.maps.Marker({
+            position : center,
+            map : map
+        });
+        */
+        var marker;
+        qq.maps.convertor.translate(center, 1, function(res){
+            latlng = res[0];
+            marker = new qq.maps.Marker({
+                map : map,
+                position : latlng
+            });
+        });
+        qq.maps.event
+            .addListener(
+                marker,
+                'click',
+                function() {
+                    infoWin.open();
+                    infoWin
+                        .setContent('<div style="text-align:center;white-space:'+
             'nowrap;margin:10px;"> '
-											+ arr1 + '</div>');
-							infoWin.setPosition(center);
-							$("#dianji1").attr("jwd", center);
-							$("#dianji1").attr("name", arr1);
-							$(".daohang").show();
-						});
-		var arr = new Array(xt1_boxName, xt2_boxName, xt3_boxName)
-		var arrDis = new Array(xt1_boxDist, xt2_boxDist, xt3_boxDist)
-		marker.setIcon(redIcon);
-		for (var i = 0; i < latlngs.length; i++) {
-			(function(n) {
-				var marker = new qq.maps.Marker({
-					position : latlngs[n],
-					map : map
-				});
-				qq.maps.event
-						.addListener(
-								marker,
-								'click',
-								function() {
-									infoWin.open();
-									infoWin
-											.setContent('<div style="text-align:left;white-space:'+
+                            + arr1 + '</div>');
+                    infoWin.setPosition(center);
+                    $("#dianji1").attr("jwd", center);
+                    $("#dianji1").attr("name", arr1);
+                    $(".daohang").show();
+                });
+        var arr = new Array(xt1_boxName, xt2_boxName, xt3_boxName)
+        var arrDis = new Array(xt1_boxDist, xt2_boxDist, xt3_boxDist)
+        marker.setIcon(redIcon);
+        for (var i = 0; i < latlngs.length; i++) {
+            (function(n) {
+                /*
+                var marker = new qq.maps.Marker({
+                    position : latlngs[n],
+                    map : map
+                });
+                */
+                var marker;
+                qq.maps.convertor.translate(latlngs[n], 1, function(res){
+                    latlng = res[0];
+                    marker = new qq.maps.Marker({
+                        map : map,
+                        position : latlng
+                    });
+                });
+                qq.maps.event
+                    .addListener(
+                        marker,
+                        'click',
+                        function() {
+                            infoWin.open();
+                            infoWin
+                                .setContent('<div style="text-align:left;white-space:'+
 	                'nowrap;margin:10px;"> '
-													+ arr[n]
-													+ '<br />距离：'
-													+ arrDis[n] + '米</div>');
-									infoWin.setPosition(latlngs[n]);
-									$("#dianji1").attr("jwd", latlngs[n]);
-									$("#dianji1").attr("name", arr[n]);
-									// $("#dianji2").attr("jwd",latlngs[n]);
-									// $("#dianji2").attr("name",arr[n]);
-									$(".daohang").show();
-								});
-			})(i);
-		}
-	}
+                                    + arr[n]
+                                    + '<br />距离：'
+                                    + arrDis[n]
+                                    + '米</div>');
+                            infoWin.setPosition(latlngs[n]);
+                            $("#dianji1").attr("jwd", latlngs[n]);
+                            $("#dianji1").attr("name", arr[n]);
+                            // $("#dianji2").attr("jwd",latlngs[n]);
+                            // $("#dianji2").attr("name",arr[n]);
+                            $(".daohang").show();
+                        });
+            })(i);
+        }
+    }
 </script>
 </html>

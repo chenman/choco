@@ -11,16 +11,8 @@
 
 
 	<sql id="Base_Column_List">
-		qx, village, address, addid, addqr, longitude, latitude
+		address, addqr, longitude, latitude
 	</sql>
-
-	<!-- qx -->
-	<!-- village -->
-	<!-- address -->
-	<!-- addid -->
-	<!-- addqr -->
-	<!-- latitude -->
-	<!-- longitude -->
 
 	<select id="selectAll" resultMap="BaseResultMap">
 		select
@@ -34,8 +26,8 @@
 		select
 		box_name,
 		address,
-		mar_lon as longitude,
-		mar_lat as latitude
+		longitude as longitude,
+		latitude as latitude
 		from box_tbl
 		where 1 = 1
 		<if test="zoneName != null">
@@ -73,23 +65,23 @@
 		SELECT
 		box_name,
 		address,
-		mar_lon as longitude,
-		mar_lat as latitude,
+		longitude,
+		latitude,
 		round(acos(
-		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( mar_lat * pi(
-		) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180- mar_lon *
+		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( latitude * pi(
+		) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180- longitude *
 		pi( ) / 180 ) + sin(#{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * sin(
-		mar_lat * pi( ) / 180 )
+		latitude * pi( ) / 180 )
 		) * 6370996.81, 2) AS distance
 		FROM
 		box_tbl
 		where
 		acos(
-		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( mar_lat
+		cos( #{latitude,jdbcType=DOUBLE} * pi( ) / 180 ) * cos( latitude
 		*
 		pi( ) / 180 ) * cos( #{longitude,jdbcType=DOUBLE} * pi( ) / 180-
-		mar_lon * pi( ) / 180 ) + sin(#{latitude,jdbcType=DOUBLE} * pi( ) /
-		180 ) * sin( mar_lat * pi( ) / 180 )
+		longitude * pi( ) / 180 ) + sin(#{latitude,jdbcType=DOUBLE} * pi( ) /
+		180 ) * sin( latitude * pi( ) / 180 )
 		) * 6370996.81 <![CDATA[<= ]]>
 		300
 		ORDER BY

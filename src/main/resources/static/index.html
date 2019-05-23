@@ -101,17 +101,17 @@
 		$(document).ready(function(){   
 			sessionStorage.getItem('testKey'); // => 返回testKey对应的值
 			console.log(sessionStorage.getItem('testKey'))
-			if(sessionStorage.getItem('testKey')==null){
-				alert("您未登录无法访问该页面，请登录");
-				window.location.href = "login.html";
-			}else{
+// 			if(sessionStorage.getItem('testKey')==null){
+// 				alert("您未登录无法访问该页面，请登录");
+// 				window.location.href = "login.html";
+// 			}else{
 		  		$(".menpailist").click(function(){
 		  			window.location.href = "menpailist.html"; 
 		  		})
 		  		$(".xiangtilist").click(function(){
 		  			window.location.href = "xiangtilist.html"; 
 		  		})
-		  	}  
+// 		  	}  
 		})
 	</script>
 

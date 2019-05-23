@@ -209,10 +209,10 @@ a:hover{ text-decoration:none;}
 	$(document).ready(function(){   
 		sessionStorage.getItem('testKey'); // => 返回testKey对应的值
 		console.log(sessionStorage.getItem('testKey'))
-		if(sessionStorage.getItem('testKey')==null){
-		  	alert("您未登录无法访问该页面，请登录");
-		  	window.location.href = "login.html"; 
-		}else{
+// 		if(sessionStorage.getItem('testKey')==null){
+// 		  	alert("您未登录无法访问该页面，请登录");
+// 		  	window.location.href = "login.html"; 
+// 		}else{
 		  	$(".index1").click(function(){
 		  		window.location.href = "index.html"; 
 		  	})
@@ -222,7 +222,7 @@ a:hover{ text-decoration:none;}
 		  	$(".chedan").click(function(){
 		  		window.location.href = "chedan.html"; 
 			})
-		}  
+// 		}  
 	})
 
 	var oHeight = $(document).height(); //浏览器当前的高度
@@ -258,7 +258,7 @@ a:hover{ text-decoration:none;}
         });     
 		$(".dangqianye").val(pageNo);
 		$.ajax({
-			url:'api/getBoxList',
+			url:'http://112.5.125.85:9001/choco/api/getBoxList',
           	type:'post',
           	xhrField: {
           		withCredentials: true
@@ -306,7 +306,7 @@ a:hover{ text-decoration:none;}
 		
 			$(".wait").show();
 			$.ajax({
-				url:'api/getBoxList',
+				url:'http://112.5.125.85:9001/choco/api/getBoxList',
 	          	type:'post',
 	          	xhrField: {
 	          		withCredentials: true
