@@ -572,6 +572,7 @@ a:hover {
                             dataType : 'jsonp',//请求方式
                             jsonp : "callback",//Jquery生成验证参数的名称
                             success : function(datamsg) {
+                                $(".wait").hide();
                                 console.log(datamsg);
                                 console.log(datamsg.code);
                                 if (datamsg.code == 200) {//code状态
