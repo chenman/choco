@@ -11,6 +11,7 @@
 <script src="js/iscroll.js"></script>
 <script src="js/pullToRefresh.js"></script>
 <script src="js/jquery.page.js"></script>
+<script src="js/convertor.js"></script>
 <style>
 * {
 	margin: 0px;
@@ -594,6 +595,7 @@ a:hover {
                                         }
                                     });
                                     $(".dangqianye").val(pageNo);
+                                    $("#wrapper ul li").remove();
                                     for (var i = 0; i < datamsg.data.list.length; i++) {
                                         var html = '<li class="aa" address="'+datamsg.data.list[i].address+'" latitude="'+datamsg.data.list[i].latitude+'" longitude="'+datamsg.data.list[i].longitude+'">'
                                             + datamsg.data.list[i].address
@@ -742,10 +744,8 @@ a:hover {
             0, 0);
         var redIcon = new qq.maps.MarkerImage("image/markerRed.png", size,
             origin, anchor);
-        var center_mar;
-        qq.maps.convertor.translate(center, 1, function(res){
-            center_mar = res[0];
-        });
+        var tmp = wgs84togcj02(center_long, center_la);
+        var center_mar = new qq.maps.LatLng(tmp[1], tmp[0])
         var map = new qq.maps.Map(document.getElementById("container"), {
             center : center_mar,
             zoom : 18
@@ -762,20 +762,12 @@ a:hover {
         var latlngs = [ new qq.maps.LatLng(a1, a2), new qq.maps.LatLng(b1, b2),
             new qq.maps.LatLng(c1, c2) ];
         var arr1 = center_Name;
-        /*
+        
         var marker = new qq.maps.Marker({
-            position : center,
+            position : center_mar,
             map : map
         });
-        */
-        var marker;
-        qq.maps.convertor.translate(center, 1, function(res){
-            latlng = res[0];
-            marker = new qq.maps.Marker({
-                map : map,
-                position : latlng
-            });
-        });
+
         qq.maps.event
             .addListener(
                 marker,
@@ -786,7 +778,7 @@ a:hover {
                         .setContent('<div style="text-align:center;white-space:'+
             'nowrap;margin:10px;"> '
                             + arr1 + '</div>');
-                    infoWin.setPosition(center);
+                    infoWin.setPosition(center_mar);
                     $("#dianji1").attr("jwd", center);
                     $("#dianji1").attr("name", arr1);
                     $(".daohang").show();
@@ -796,20 +788,13 @@ a:hover {
         marker.setIcon(redIcon);
         for (var i = 0; i < latlngs.length; i++) {
             (function(n) {
-                /*
+            	var tmp = wgs84togcj02(latlngs[n].getLng(), latlngs[n].getLat());
+                var latlng = new qq.maps.LatLng(tmp[1], tmp[0]);
                 var marker = new qq.maps.Marker({
-                    position : latlngs[n],
+                    position : latlng,
                     map : map
                 });
-                */
-                var marker;
-                qq.maps.convertor.translate(latlngs[n], 1, function(res){
-                    latlng = res[0];
-                    marker = new qq.maps.Marker({
-                        map : map,
-                        position : latlng
-                    });
-                });
+                
                 qq.maps.event
                     .addListener(
                         marker,
@@ -823,11 +808,9 @@ a:hover {
                                     + '<br />距离：'
                                     + arrDis[n]
                                     + '米</div>');
-                            infoWin.setPosition(latlngs[n]);
-                            $("#dianji1").attr("jwd", latlngs[n]);
+                            infoWin.setPosition(latlng);
+                            $("#dianji1").attr("jwd", latlng);
                             $("#dianji1").attr("name", arr[n]);
-                            // $("#dianji2").attr("jwd",latlngs[n]);
-                            // $("#dianji2").attr("name",arr[n]);
                             $(".daohang").show();
                         });
             })(i);
