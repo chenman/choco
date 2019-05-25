@@ -580,7 +580,10 @@ a:hover {
                                     var count = datamsg.data.count;
                                     $(".dangqianye").attr('zs', count);
                                     // 						xr();
-
+                                    if (count > 0)
+                                        pageNo = 1;
+                                    else
+                                        pageNo = 0;
                                     // 避免第一页加载，两次查询 BEGIN
                                     var pages = parseInt(count)
                                         / parseInt(pageSize);
